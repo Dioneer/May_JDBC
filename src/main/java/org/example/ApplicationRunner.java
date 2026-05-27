@@ -1,7 +1,19 @@
 package org.example;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class ApplicationRunner {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String username = "postgres";
+        String password = "123456";
+        try(Connection connection = DriverManager.getConnection(url, username, password)){
+            System.out.println(connection.getTransactionIsolation());
+
+        }
 
     }
+
 }
