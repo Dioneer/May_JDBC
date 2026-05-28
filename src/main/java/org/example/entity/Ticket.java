@@ -79,6 +79,14 @@ public class Ticket {
                 && Objects.equals(seatNo, ticket.seatNo) && Objects.equals(cost, ticket.cost);
     }
 
+    public Ticket(String passportNo, String passengerName, Integer flightId, String seatNo, BigDecimal cost) {
+        this.passportNo = passportNo;
+        this.passengerName = passengerName;
+        this.flightId = flightId;
+        this.seatNo = seatNo;
+        this.cost = cost;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, passportNo, passengerName, flightId, seatNo, cost);

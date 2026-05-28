@@ -1,7 +1,10 @@
 package org.example;
 
+import org.example.dao.TicketDao;
+import org.example.entity.Ticket;
 import org.example.utils.ConnectionManager;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,7 +42,16 @@ public class ApplicationRunner {
 //        getPrepareTicketsByFlightId(2);
 //        getFlightsBetween(LocalDate.of(2021,1,3),
 //                LocalDate.of(2021, 1,5));
-
+        TicketDao ticketDao = TicketDao.getInstance();
+//        Ticket t = ticketDao.save(new Ticket("A5126545D","Elena",1,"8BF",
+//                BigDecimal.valueOf(2.35)));
+//        System.out.println(t);
+//        System.out.println(ticketDao.delete(t.getId()));
+        System.out.println(ticketDao.findAll());
+        System.out.println(ticketDao.findById(1).orElseThrow());
+        System.out.println(ticketDao.update(new Ticket(1,"A85614G","Elena",1,"9BF",
+                BigDecimal.valueOf(2.35))));
+        System.out.println(ticketDao.findById(1).orElseThrow());
     }
 //    public static void getTicketsByFlightId(int flightId){
 //        List<Integer> tickets = new ArrayList<>();

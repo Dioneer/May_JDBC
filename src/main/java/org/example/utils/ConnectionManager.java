@@ -35,7 +35,7 @@ public final class ConnectionManager {
 
     public static Connection get(){
         try {
-            System.out.println(pool.size());
+            System.out.println("Pool size "+pool.size());
             return pool.take();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
