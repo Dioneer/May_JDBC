@@ -35,64 +35,65 @@ public class ApplicationRunner {
 //                System.out.println(set.getLong("id"));
 //            }
 //        }
-        getTicketsByFlightId(2);
-        getPrepareTicketsByFlightId(2);
-        getFlightsBetween(LocalDate.of(2021,1,3),
-                LocalDate.of(2021, 1,5));
+//        getTicketsByFlightId(2);
+//        getPrepareTicketsByFlightId(2);
+//        getFlightsBetween(LocalDate.of(2021,1,3),
+//                LocalDate.of(2021, 1,5));
+
     }
-    public static void getTicketsByFlightId(int flightId){
-        List<Integer> tickets = new ArrayList<>();
-        String sql3 = """
-                select * from ticket
-                where flight_id = %s
-                """.formatted(flightId);
-        try(Connection connection = ConnectionManager.get();
-            Statement statement = connection.createStatement()){
-            ResultSet set = statement.executeQuery(sql3);
-            while (set.next()){
-                tickets.add(set.getInt("id"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(tickets);
-    }
-    public static void getPrepareTicketsByFlightId(int flightId){
-        List<Integer> tickets = new ArrayList<>();
-        String sql3 = """
-                select * from ticket
-                where flight_id = ?
-                """;
-        try(Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(sql3)){
-            statement.setInt(1,flightId);
-            ResultSet set = statement.executeQuery();
-            while (set.next()){
-                tickets.add(set.getInt("id"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(tickets);
-    }
-    public static void getFlightsBetween(LocalDate start, LocalDate end){
-        List<Integer> flights = new ArrayList<>();
-        String sql3 = """
-                select * from flight
-                where departure_date between ? and ?;
-                """;
-        try(Connection connection = ConnectionManager.get();
-            PreparedStatement statement = connection.prepareStatement(sql3)){
-            statement.setTimestamp(1,Timestamp.valueOf(start.atStartOfDay()));
-            statement.setTimestamp(2,Timestamp.valueOf(end.atStartOfDay()));
-            ResultSet set = statement.executeQuery();
-            while (set.next()){
-                flights.add(set.getInt("id"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(flights);
-    }
+//    public static void getTicketsByFlightId(int flightId){
+//        List<Integer> tickets = new ArrayList<>();
+//        String sql3 = """
+//                select * from ticket
+//                where flight_id = %s
+//                """.formatted(flightId);
+//        try(Connection connection = ConnectionManager.get();
+//            Statement statement = connection.createStatement()){
+//            ResultSet set = statement.executeQuery(sql3);
+//            while (set.next()){
+//                tickets.add(set.getInt("id"));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        System.out.println(tickets);
+//    }
+//    public static void getPrepareTicketsByFlightId(int flightId){
+//        List<Integer> tickets = new ArrayList<>();
+//        String sql3 = """
+//                select * from ticket
+//                where flight_id = ?
+//                """;
+//        try(Connection connection = ConnectionManager.get();
+//            PreparedStatement statement = connection.prepareStatement(sql3)){
+//            statement.setInt(1,flightId);
+//            ResultSet set = statement.executeQuery();
+//            while (set.next()){
+//                tickets.add(set.getInt("id"));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        System.out.println(tickets);
+//    }
+//    public static void getFlightsBetween(LocalDate start, LocalDate end){
+//        List<Integer> flights = new ArrayList<>();
+//        String sql3 = """
+//                select * from flight
+//                where departure_date between ? and ?;
+//                """;
+//        try(Connection connection = ConnectionManager.get();
+//            PreparedStatement statement = connection.prepareStatement(sql3)){
+//            statement.setTimestamp(1,Timestamp.valueOf(start.atStartOfDay()));
+//            statement.setTimestamp(2,Timestamp.valueOf(end.atStartOfDay()));
+//            ResultSet set = statement.executeQuery();
+//            while (set.next()){
+//                flights.add(set.getInt("id"));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        System.out.println(flights);
+//    }
 
 }

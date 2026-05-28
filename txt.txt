@@ -1,0 +1,52 @@
+create database may_flight;
+-- drop table airport;
+create table airport(
+    code int unique not null PRIMARY KEY,
+    country varchar(128) not null,
+    city varchar(128) not null
+);
+-- drop table aircraft;
+create table aircraft(
+    id serial PRIMARY KEY,
+    model varchar(128) not null
+);
+-- drop table seat;
+create table seat(
+    aircraft_id int not null references aircraft PRIMARY KEY,
+    seat_no int not null
+);
+-- drop table flight;
+create table flight(
+    id serial PRIMARY KEY,
+    flight_no int not null,
+    departure_date date,
+    departure_airport_code int not null references airport(code),
+    arrival_date date,
+    arrival_airport_code int not null references airport(code),
+    aircraft_id int not null references aircraft,
+    status varchar(128) not null
+);
+-- drop table ticket;
+create table ticket(
+    id serial PRIMARY KEY,
+    passport_no varchar(64) unique not null,
+    passenger_name varchar(64) not null,
+    flight_id int not null references flight,
+    seat_no char(4) unique not null,
+    cost numeric(8,2)
+);
+
+insert into airport(code, country, city) VALUES (123456, 'Russia', 'Moscow'),
+                                                (654321, 'USA', 'Florida'),
+                                                (112233, 'Bulgium', 'Type');
+insert into flight(flight_no, departure_date, departure_airport_code, arrival_date, arrival_airport_code,
+                   aircraft_id, status) values
+    (1,'2021-01-02',123456,'2021-01-02',654321,1,'ready'),
+    (2,'2021-01-03',654321,'2021-01-03',123456,2,'ready'),
+    (3,'2021-01-04',654321,'2021-01-04',112233,2,'ready'),
+    (4,'2021-01-05',112233,'2021-01-05',654321,1,'ready');
+insert into ticket(passport_no, passenger_name, flight_id, seat_no, cost) values
+    ('4510198364','Ivan',1,'5A',12.54),
+    ('4510143215','Roman',2,'5D',12.54),
+    ('4510176548','Petr',2,'5DD',12.54),
+    ('4510154324','Pavel',3,'5AS',12.54);
