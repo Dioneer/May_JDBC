@@ -20,15 +20,15 @@ public class ApplicationRunner {
                 select * from ticket;
                 """;
 
-//        try(Connection connection = ConnectionManager.open();
+//        try(Connection connection = ConnectionManager.get();
 //            Statement statement = connection.createStatement()){
 //            System.out.println(statement.execute(sql));
 //        }
-//        try(Connection connection = ConnectionManager.open();
+//        try(Connection connection = ConnectionManager.get();
 //            Statement statement = connection.createStatement()){
 //            System.out.println(statement.executeUpdate(sql1));
 //        }
-//        try(Connection connection = ConnectionManager.open();
+//        try(Connection connection = ConnectionManager.get();
 //            Statement statement = connection.createStatement()){
 //            ResultSet set = statement.executeQuery(sql2);
 //            while (set.next()){
@@ -46,7 +46,7 @@ public class ApplicationRunner {
                 select * from ticket
                 where flight_id = %s
                 """.formatted(flightId);
-        try(Connection connection = ConnectionManager.open();
+        try(Connection connection = ConnectionManager.get();
             Statement statement = connection.createStatement()){
             ResultSet set = statement.executeQuery(sql3);
             while (set.next()){
@@ -63,7 +63,7 @@ public class ApplicationRunner {
                 select * from ticket
                 where flight_id = ?
                 """;
-        try(Connection connection = ConnectionManager.open();
+        try(Connection connection = ConnectionManager.get();
             PreparedStatement statement = connection.prepareStatement(sql3)){
             statement.setInt(1,flightId);
             ResultSet set = statement.executeQuery();
@@ -81,7 +81,7 @@ public class ApplicationRunner {
                 select * from flight
                 where departure_date between ? and ?;
                 """;
-        try(Connection connection = ConnectionManager.open();
+        try(Connection connection = ConnectionManager.get();
             PreparedStatement statement = connection.prepareStatement(sql3)){
             statement.setTimestamp(1,Timestamp.valueOf(start.atStartOfDay()));
             statement.setTimestamp(2,Timestamp.valueOf(end.atStartOfDay()));
