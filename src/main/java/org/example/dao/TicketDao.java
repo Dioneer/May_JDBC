@@ -80,6 +80,26 @@ public class TicketDao implements Dao<Ticket, Integer> {
         }
 
     }
+    public List<Ticket> findAllByFlightId(Integer id) {
+        List<Ticket> arr = new ArrayList<>();
+        final String findAll = """
+                select * from ticket t
+                left join flight f on f.id = t.flight_id
+                where t.flight_id = ?;
+                """;
+        try(Connection connection = ConnectionManager.get();
+            PreparedStatement statement = connection.prepareStatement(findAll)){
+            statement.setInt(1, id);
+            ResultSet set = statement.executeQuery();
+            while(set.next()){
+                arr.add(createItem(set));
+            }
+            return arr;
+        }catch (SQLException e){
+            throw new DaoException("Ticket DAO findAll method",e);
+        }
+
+    }
     public List<Ticket> findAll(TicketFilter filter) {
         List<Object> param = new ArrayList<>();
         List<String>whereSQL = new ArrayList<>();
