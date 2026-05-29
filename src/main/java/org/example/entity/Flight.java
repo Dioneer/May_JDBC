@@ -1,0 +1,120 @@
+package org.example.entity;
+
+import java.util.Date;
+import java.util.Objects;
+
+public class Flight {
+    private Integer id;
+    private Integer flightNo;
+    private Date departureDate;
+    private Integer departureAirportCode;
+    private Date arrivalDate;
+    private Integer arrivalAirportCode;
+    private Integer aircraftId;
+    private String status;
+
+    public Flight(Integer id, Integer flightNo, Date departureDate, Integer departureAirportCode, Date arrivalDate,
+                  Integer arrivalAirportCode, Integer aircraftId, String status) {
+        this.id = id;
+        this.flightNo= flightNo;
+        this.departureDate= departureDate;
+        this.departureAirportCode = departureAirportCode;
+        this.arrivalDate = arrivalDate;
+        this.arrivalAirportCode = arrivalAirportCode;
+        this.aircraftId = aircraftId;
+        this.status = status;
+    }
+    public Flight(){};
+    public Flight(Integer flightNo, Date departureDate, Integer departureAirportCode, Date arrivalDate,
+                  Integer arrivalAirportCode, Integer aircraftId, String status) {
+        this.flightNo = flightNo;
+        this.departureDate = departureDate;
+        this.departureAirportCode = departureAirportCode;
+        this.arrivalDate = arrivalDate;
+        this.arrivalAirportCode = arrivalAirportCode;
+        this.aircraftId= aircraftId;
+        this.status = status;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getFlightNo() {
+        return flightNo;
+    }
+
+    public void setFlightNo(Integer flightNo) {
+        this.flightNo = flightNo;
+    }
+
+    public Date getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(Date departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    public Integer getDepartureAirportCode() {
+        return departureAirportCode;
+    }
+
+    public void setDepartureAirportCode(Integer departureAirportCode) {
+        this.departureAirportCode = departureAirportCode;
+    }
+
+    public Date getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
+    public Integer getArrivalAirportCode() {
+        return arrivalAirportCode;
+    }
+
+    public void setArrivalAirportCode(Integer arrivalAirportCode) {
+        this.arrivalAirportCode =arrivalAirportCode;
+    }
+
+    public Integer getAircraftId() {
+        return aircraftId;
+    }
+
+    public void setAircraftId(Integer aircraftId) {
+        this.aircraftId = aircraftId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Flight flight = (Flight) o;
+        return Objects.equals(id, flight.id) && Objects.equals(flightNo, flight.flightNo)
+                && Objects.equals(departureDate, flight.departureDate) &&
+                Objects.equals(departureAirportCode, flight.departureAirportCode) &&
+                Objects.equals(arrivalDate, flight.arrivalDate) &&
+                Objects.equals(arrivalAirportCode, flight.arrivalAirportCode) &&
+                Objects.equals(aircraftId, flight.aircraftId) && Objects.equals(status, flight.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, flightNo, departureDate, departureAirportCode,
+                arrivalDate, arrivalAirportCode, aircraftId, status);
+    }
+}
