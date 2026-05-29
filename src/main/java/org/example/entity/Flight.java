@@ -1,20 +1,21 @@
 package org.example.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Flight {
     private Integer id;
     private Integer flightNo;
-    private Date departureDate;
+    private LocalDateTime departureDate;
     private Integer departureAirportCode;
-    private Date arrivalDate;
+    private LocalDateTime arrivalDate;
     private Integer arrivalAirportCode;
     private Integer aircraftId;
     private String status;
+    public Flight(){};
 
-    public Flight(Integer id, Integer flightNo, Date departureDate, Integer departureAirportCode, Date arrivalDate,
-                  Integer arrivalAirportCode, Integer aircraftId, String status) {
+    public Flight(Integer id, Integer flightNo, LocalDateTime departureDate, Integer departureAirportCode,
+                  LocalDateTime arrivalDate, Integer arrivalAirportCode, Integer aircraftId, String status) {
         this.id = id;
         this.flightNo= flightNo;
         this.departureDate= departureDate;
@@ -24,9 +25,8 @@ public class Flight {
         this.aircraftId = aircraftId;
         this.status = status;
     }
-    public Flight(){};
-    public Flight(Integer flightNo, Date departureDate, Integer departureAirportCode, Date arrivalDate,
-                  Integer arrivalAirportCode, Integer aircraftId, String status) {
+    public Flight(Integer flightNo, LocalDateTime departureDate, Integer departureAirportCode,
+                  LocalDateTime arrivalDate, Integer arrivalAirportCode, Integer aircraftId, String status) {
         this.flightNo = flightNo;
         this.departureDate = departureDate;
         this.departureAirportCode = departureAirportCode;
@@ -52,11 +52,11 @@ public class Flight {
         this.flightNo = flightNo;
     }
 
-    public Date getDepartureDate() {
+    public LocalDateTime getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(Date departureDate) {
+    public void setDepartureDate(LocalDateTime departureDate) {
         this.departureDate = departureDate;
     }
 
@@ -68,11 +68,11 @@ public class Flight {
         this.departureAirportCode = departureAirportCode;
     }
 
-    public Date getArrivalDate() {
+    public LocalDateTime getArrivalDate() {
         return arrivalDate;
     }
 
-    public void setArrivalDate(Date arrivalDate) {
+    public void setArrivalDate(LocalDateTime arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
 

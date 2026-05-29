@@ -9,10 +9,9 @@ import java.util.Optional;
 
 public interface Dao<T,M> {
     public T save(T ticket);
-    public boolean delete(Integer id);
+    public boolean delete(M id);
     public List<T> findAll();
-    public List<T> findAll(M filter);
-    public Optional<T> findById(Integer id);
+    public Optional<T> findById(M id);
     public boolean update(T item);
     public T createItem(ResultSet set);
 }

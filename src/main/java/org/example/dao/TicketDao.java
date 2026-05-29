@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.example.dto.TicketFilter;
+import org.example.entity.Flight;
 import org.example.entity.Ticket;
 import org.example.exception.DaoException;
 import org.example.utils.ConnectionManager;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class TicketDao implements Dao<Ticket, TicketFilter> {
+public class TicketDao implements Dao<Ticket, Integer> {
     private static volatile TicketDao INSTANCE;
     private TicketDao(){}
     public static TicketDao getInstance(){
@@ -25,7 +26,7 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
         }
         return INSTANCE;
     }
-
+    @Override
     public Ticket save(Ticket ticket){
         final String save = """
         insert into ticket (passport_no, passenger_name, flight_id, seat_no, cost) values (?,?,?,?,?);
@@ -34,7 +35,7 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
             PreparedStatement statement = connection.prepareStatement(save, Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1, ticket.getPassportNo());
             statement.setString(2, ticket.getPassengerName());
-            statement.setInt(3, ticket.getFlightId());
+            statement.setInt(3, ticket.getFlight().getId());
             statement.setString(4,ticket.getSeatNo());
             statement.setBigDecimal(5, ticket.getCost());
             statement.executeUpdate();
@@ -47,6 +48,7 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
             throw new DaoException("Ticket DAO save method",e);
         }
     }
+    @Override
     public boolean delete(Integer id) {
         final String delete = """
                 delete from ticket where id = ?;
@@ -59,10 +61,12 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
             throw new DaoException("Ticket DAO delete method",e);
         }
     }
+    @Override
     public List<Ticket> findAll() {
         List<Ticket> arr = new ArrayList<>();
         final String findAll = """
-                select * from ticket;
+                select * from ticket
+                left join flight f on f.id = ticket.flight_id;
                 """;
         try(Connection connection = ConnectionManager.get();
             PreparedStatement statement = connection.prepareStatement(findAll)){
@@ -91,7 +95,7 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
         param.add(filter.offSet());
         String str =  whereSQL.stream().
                 collect(Collectors.joining(" and ", "where ", "limit ? offset ?"));
-        String findAll = "select * from ticket " + str;
+        String findAll = "select * from ticket left join flight f on f.id = ticket.flight_id " + str;
 
         try(Connection connection = ConnectionManager.get();
             PreparedStatement statement = connection.prepareStatement(findAll)){
@@ -110,9 +114,10 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
         }
 
     }
+    @Override
     public Optional<Ticket> findById(Integer id) {
         final String findById = """
-                select * from ticket where id = ?;
+                select * from ticket t left join flight f on f.id = t.flight_id where t.id = ?;
                 """;
         try(Connection connection = ConnectionManager.get();
             PreparedStatement statement = connection.prepareStatement(findById )){
@@ -128,6 +133,7 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
         }
 
     }
+    @Override
     public boolean update(Ticket ticket){
         final String update = """
         update ticket 
@@ -138,7 +144,7 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
             PreparedStatement statement = connection.prepareStatement(update)){
             statement.setString(1, ticket.getPassportNo());
             statement.setString(2, ticket.getPassengerName());
-            statement.setInt(3, ticket.getFlightId());
+            statement.setInt(3, ticket.getFlight().getId());
             statement.setString(4,ticket.getSeatNo());
             statement.setBigDecimal(5, ticket.getCost());
             statement.setInt(6, ticket.getId());
@@ -147,16 +153,28 @@ public class TicketDao implements Dao<Ticket, TicketFilter> {
             throw new DaoException("Ticket DAO save method",e);
         }
     }
+    @Override
     public Ticket createItem(ResultSet set){
-        Ticket ticket = new Ticket();
+        Flight flight = new Flight();
         try {
-            ticket.setId(set.getInt("id"));
-            ticket.setPassportNo(set.getString("passport_no"));
-            ticket.setPassengerName(set.getString("passenger_name"));
-            ticket.setFlightId(set.getInt("flight_id"));
-            ticket.setSeatNo(set.getString("seat_no"));
-            ticket.setCost(set.getBigDecimal("cost"));
-            return ticket;
+            flight.setId(set.getInt("id"));
+            flight.setFlightNo(set.getInt("flight_no"));
+            flight.setDepartureDate(set.getTimestamp("departure_date").toLocalDateTime());
+            flight.setDepartureAirportCode(set.getInt("departure_airport_code"));
+            flight.setArrivalDate(set.getTimestamp("arrival_date").toLocalDateTime());
+            flight.setArrivalAirportCode(set.getInt("arrival_airport_code"));
+            flight.setAircraftId(set.getInt("aircraft_id"));
+            flight.setStatus(set.getString("status"));
+        } catch (SQLException e) {
+            throw new DaoException("Flight DAO create flight method",e);
+        }
+        try {
+            return new Ticket(set.getInt("id"),
+            set.getString("passport_no"),
+            set.getString("passenger_name"),
+            flight,
+            set.getString("seat_no"),
+            set.getBigDecimal("cost"));
         } catch (SQLException e) {
             throw new DaoException("Ticket DAO create ticket method",e);
         }

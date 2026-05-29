@@ -12,7 +12,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FlightDao implements Dao<Flight, FlightFilter>{
+public class FlightDao implements Dao<Flight, Integer>{
+    private static volatile FlightDao INSTANCE;
+    private FlightDao(){}
+    public static FlightDao getInstance(){
+        if(INSTANCE == null){
+            synchronized (Flight.class){
+                if(INSTANCE == null){
+                    return INSTANCE = new FlightDao();
+                }
+            }
+        }
+        return INSTANCE;
+    }
     @Override
     public Flight save(Flight flight) {
         final String save = """
@@ -22,9 +34,9 @@ public class FlightDao implements Dao<Flight, FlightFilter>{
         try(Connection connection = ConnectionManager.get();
             PreparedStatement statement = connection.prepareStatement(save, Statement.RETURN_GENERATED_KEYS)){
             statement.setInt(1, flight.getFlightNo());
-            statement.setDate(2, (Date) flight.getDepartureDate());
+            statement.setTimestamp(2, Timestamp.valueOf(flight.getDepartureDate()));
             statement.setInt(3, flight.getDepartureAirportCode());
-            statement.setDate(4, (Date) flight.getArrivalDate());
+            statement.setTimestamp(4, Timestamp.valueOf(flight.getArrivalDate()));
             statement.setInt(5, flight.getArrivalAirportCode());
             statement.setInt(6, flight.getAircraftId());
             statement.setString(7, flight.getStatus());
@@ -68,7 +80,6 @@ public class FlightDao implements Dao<Flight, FlightFilter>{
             throw new DaoException("Flight DAO findAll method",e);
         }
     }
-    @Override
     public List<Flight> findAll(FlightFilter filter) {
         List<Object> param = new ArrayList<>();
         List<String>whereSQL = new ArrayList<>();
@@ -131,9 +142,9 @@ public class FlightDao implements Dao<Flight, FlightFilter>{
         try(Connection connection = ConnectionManager.get();
             PreparedStatement statement = connection.prepareStatement(update)){
             statement.setInt(1, flight.getFlightNo());
-            statement.setDate(2, (Date) flight.getDepartureDate());
+            statement.setTimestamp(2, Timestamp.valueOf(flight.getDepartureDate()));
             statement.setInt(3, flight.getDepartureAirportCode());
-            statement.setDate(4, (Date) flight.getArrivalDate());
+            statement.setTimestamp(4, Timestamp.valueOf(flight.getArrivalDate()));
             statement.setInt(5, flight.getArrivalAirportCode());
             statement.setInt(6, flight.getAircraftId());
             statement.setString(7, flight.getStatus());
@@ -147,9 +158,9 @@ public class FlightDao implements Dao<Flight, FlightFilter>{
         try {
             flight.setId(set.getInt("id"));
             flight.setFlightNo(set.getInt("flight_no"));
-            flight.setDepartureDate(set.getDate("departure_date"));
+            flight.setDepartureDate(set.getTimestamp("departure_date").toLocalDateTime());
             flight.setDepartureAirportCode(set.getInt("departure_airport_code"));
-            flight.setArrivalDate(set.getDate("arrival_date"));
+            flight.setArrivalDate(set.getTimestamp("arrival_date").toLocalDateTime());
             flight.setArrivalAirportCode(set.getInt("arrival_airport_code"));
             flight.setAircraftId(set.getInt("aircraft_id"));
             flight.setStatus(set.getString("status"));

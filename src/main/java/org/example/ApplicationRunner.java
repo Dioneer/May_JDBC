@@ -53,7 +53,7 @@ public class ApplicationRunner {
 //        System.out.println(ticketDao.update(new Ticket(1,"A85614G","Elena",1,"9BF",
 //                BigDecimal.valueOf(2.35))));
 //        System.out.println(ticketDao.findById(1).orElseThrow());
-        System.out.println(ticketDao.findAll(new TicketFilter("Elena", null, 12, 0)));
+        System.out.println(ticketDao.findAll(new TicketFilter("Ivan", null, 12, 0)));
     }
 //    public static void getTicketsByFlightId(int flightId){
 //        List<Integer> tickets = new ArrayList<>();
