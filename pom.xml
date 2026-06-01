@@ -5,7 +5,7 @@
   <groupId>org.example</groupId>
   <artifactId>May_JDBC</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>May_JDBC</name>
 
