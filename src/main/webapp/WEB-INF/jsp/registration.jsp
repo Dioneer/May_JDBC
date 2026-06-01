@@ -30,5 +30,12 @@
     <input type="radio" name="gender" value="female"> Feale<br/>
     <input type="submit" value="Submit">
 </form>
+<c:if test="${not empty requestScope.errors}">
+    <div>
+        <c:forEach var="error" items="${requestScope.errors}">
+            <span>${error}</span><br/>
+        </c:forEach>
+    </div>
+</c:if>
 </body>
 </html>

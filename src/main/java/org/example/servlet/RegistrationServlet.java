@@ -6,15 +6,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.dto.CreateUserDto;
+import org.example.entity.Gender;
+import org.example.entity.Role;
+import org.example.exception.ValidationException;
+import org.example.service.UserService;
 
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
+    private final UserService userService = UserService.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("roles", List.of("Admin", "User"));
+        req.setAttribute("roles", Role.values());
+        req.setAttribute("gender", Gender.values());
         req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
     }
 
@@ -28,6 +34,13 @@ public class RegistrationServlet extends HttpServlet {
                 .role(req.getParameter("role"))
                 .gender(req.getParameter("gender"))
                 .build();
+        try {
+            userService.create(userDto);
+            resp.sendRedirect("/login");
+        }catch (ValidationException e){
+            req.setAttribute("errors", e.getErrors());
+            doGet(req, resp);
+        }
     }
 
 }
