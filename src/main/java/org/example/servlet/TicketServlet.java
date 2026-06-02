@@ -16,7 +16,6 @@ public class TicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
         Integer flightId = Integer.valueOf(req.getParameter("flightId"));
         req.setAttribute("tickets", ticketService.flightAllByFlightId(flightId));
         req.getRequestDispatcher("/WEB-INF/jsp/tickets.jsp" ).forward(req, resp);

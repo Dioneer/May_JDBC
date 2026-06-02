@@ -16,7 +16,6 @@ public class FlightServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
         req.setAttribute("flights", flightService.flightList());
         req.getRequestDispatcher("/WEB-INF/jsp/flights.jsp").forward(req, resp);
     }

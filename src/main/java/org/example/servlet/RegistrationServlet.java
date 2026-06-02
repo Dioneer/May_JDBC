@@ -12,7 +12,6 @@ import org.example.exception.ValidationException;
 import org.example.service.UserService;
 
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
