@@ -1,6 +1,6 @@
 package org.example.dao;
 
-import org.example.entity.User;
+import org.example.entity.*;
 import org.example.exception.DaoException;
 import org.example.utils.ConnectionManager;
 
@@ -48,6 +48,25 @@ public class UserDao implements Dao<User, Integer>{
         }
     }
 
+    public Optional<User> getByEmailAndPassword(String email, String password){
+        String sql = """
+                select * from users where email = ? and password = ?;
+                """;
+        try(Connection connection = ConnectionManager.get();
+            PreparedStatement state = connection.prepareStatement(sql)){
+            state.setObject(1, email);
+            state.setObject(1, password);
+            ResultSet set = state.executeQuery();
+            User user = null;
+            if(set.next()){
+                user = createItem(set);
+            }
+            return Optional.ofNullable(user);
+        }catch (SQLException e){
+            throw new DaoException("User DAO getByEmailAndPassword exception", e);
+        }
+    }
+
     @Override
     public boolean delete(Integer id) {
         return false;
@@ -70,6 +89,17 @@ public class UserDao implements Dao<User, Integer>{
 
     @Override
     public User createItem(ResultSet set) {
-        return null;
+        try {
+            return User.builder().id(set.getInt("id"))
+                    .role(Role.valueOf(set.getString("role")))
+                    .gender(Gender.valueOf(set.getString("gender")))
+                    .birthday(set.getDate("birthday").toLocalDate())
+                    .email(set.getString("email"))
+                    .password(set.getString("password"))
+                    .name(set.getString("name"))
+                    .build();
+        } catch (SQLException e) {
+            throw new DaoException("Ticket DAO create ticket method",e);
+        }
     }
 }

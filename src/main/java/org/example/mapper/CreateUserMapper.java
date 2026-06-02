@@ -1,6 +1,5 @@
 package org.example.mapper;
 
-import org.example.dao.UserDao;
 import org.example.dto.CreateUserDto;
 import org.example.entity.Gender;
 import org.example.entity.Role;
